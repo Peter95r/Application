@@ -6,5 +6,5 @@ package Application.vehicles;
 }
 class Truck implements Vehicles {
 	
-	int capasity;     //capasity of vehicle with tones
+	int capasity;     //capacity of vehicle with tones
 }

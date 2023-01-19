@@ -8,24 +8,36 @@ public class App {
     public static void main(String[] args){
         ArrayList<Warehouse> warehouseList = new ArrayList<>();     //Instantiation of arraylist in which all warehouses can be stored
         Scanner scan = new Scanner(System.in);                      //Instantiate scanner
+        Warehouse currentWarehouse;                                 //Declare variable to store currently selected warehouse
 
         //Instantiation of several warehouses, to be added to warehouseList
         warehouseList.add(new Warehouse("Deventer"));
         warehouseList.add(new Warehouse("Berlin"));
         warehouseList.add(new Warehouse("Warszawa"));
 
-        //Declaration of currently selected warehouse
-        Warehouse currentWarehouse;
+        currentWarehouse = warehouseSelection(warehouseList, scan);
+        System.out.println(currentWarehouse);
 
-        System.out.println("Select warehouse: ");
 
-        //Print an option and the name (city) for each warehouse
-        for(Warehouse warehouse: warehouseList){
-            System.out.println((warehouseList.indexOf(warehouse) + 1) + ": " + warehouse.getName());
-        }
+    }
 
+
+
+
+
+    //Created a static method for warehouse selection
+    public static Warehouse warehouseSelection(ArrayList<Warehouse> warehouseList, Scanner scan){
         while(true){
             int chosenIndex = 0;
+
+            System.out.println("List of warehouses: ");
+            //Print an option and the name (city) for each warehouse
+            for(Warehouse warehouse: warehouseList){
+                System.out.println((warehouseList.indexOf(warehouse) + 1) + ": " + warehouse.getName());
+            }
+
+            System.out.print("Select warehouse: ");
+            //Ask for user input
             String input = scan.nextLine();
 
             //check whether user gives an Integer input. If so, store in chosenIndex.
@@ -36,12 +48,10 @@ public class App {
             }
 
             if(chosenIndex >= 1 && chosenIndex <= warehouseList.size())  {
-                currentWarehouse = warehouseList.get(chosenIndex);
-                System.out.println(currentWarehouse);
-                break;
+                return warehouseList.get(chosenIndex);
+
             } else {
                 System.out.println("Incorrect input, please select a warehouse by entering a valid option.");
-                System.out.println("Select warehouse: ");
             }
         }
     }

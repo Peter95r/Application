@@ -6,6 +6,13 @@ import Application.cargo.*;
 
 public class App {
     public static void main(String[] args){
+    	
+    	// This is only for fill methodTest: run it so you know how it looks 
+    	Warehouse ww = new Warehouse("TestHouse");
+    	ww.fillWarehouse();
+    	ww.fillWarehouse();
+    	ww.fillWarehouse();
+    	
         ArrayList<Warehouse> warehouseList = new ArrayList<>();     //Instantiation of arraylist in which all warehouses can be stored
         Scanner scan = new Scanner(System.in);                      //Instantiation of scanner
         Warehouse currentWarehouse;                                 //Declare variable to store currently selected warehouse

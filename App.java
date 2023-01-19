@@ -1,5 +1,4 @@
 package Application;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.ArrayList;
 import Application.cargo.*;
@@ -7,6 +6,17 @@ import Application.cargo.*;
 
 public class App {
     public static void main(String[] args){
+    	Warehouse ww = new Warehouse("abc");
+    	ww.fillWarehouse();
+    	ww.fillWarehouse();
+    	ww.fillWarehouse();
+    	ww.sellCargo();
+    	ww.sellCargo();
+    	ww.sellCargo();
+    	System.out.println("OVER");
+    	
+    	
+    	
         ArrayList<Warehouse> warehouseList = new ArrayList<>();     //Instantiation of arraylist in which all warehouses can be stored
         Warehouse selectedWarehouse;                                 //Declare variable to store currently selected warehouse
 

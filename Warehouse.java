@@ -6,10 +6,10 @@ import Application.cargo.*;
 class Warehouse{
 
     private String name;
-    private int currentContent = 500;
     private final int maxCapacity = 1000; // i made it final for now. its easier to work with 
     private int currentSpace;    // max capacity - cargo.amount its for calculation to tell if we have enough space of new cargo or not
 
+    private int currentContent = 500;
     private Cargo[] materials = {new Wood(), new Iron(), new Lego()};
 
     //constructor with name as parameter
@@ -39,7 +39,7 @@ class Warehouse{
     		
     		// update amount in target (in cargo this is called weight)
     		target.addWeight(addedAmount);
-    		System.out.println(target.getClass() + ": current weight is: " + target.getWeight() +" //test message from: Warehouse.udateData()");
+    		System.out.println(target.getClass() + ": current weight is: " + target.getWeight() +" //test message from: Warehouse.updateData()");
     		// update free space based on new data
     		initSpace();
     	}
@@ -54,25 +54,45 @@ class Warehouse{
     
     // this method will fill your warehouse
     public void fillWarehouse() {
-    	Scanner in = new Scanner(System.in); // local scanner
-    	Cargo target;                       // cargo on which we will operate
-    	
-    	
+    	Scanner scan = new Scanner(System.in);      // local scanner
+    	Cargo selectedCargo;                        // cargo on which we will operate
+
         // @@ "I want to choose what cargo is coming in: wood, iron, lego"
-    	System.out.println("What material do you want to get ?");
-    	System.out.println("Wood: 1, Iron: 2, Lego: 3");
-    	
-    	// for now this part dont do anything if, input is wrong like wrong number or letter, this will come latter
-    	// popably will be: instead in.nextInt() will be Integer.parseInt(in.next()) and check if int is not to big
-    	target = materials[in.nextInt()-1]; 
-    	
-        // @@ "Add some amount of chosen cargo"
-    	System.out.println("How much material do you want to get?");
-    	int amount = in.nextInt();
+    	while(true) {
+            System.out.println("\nWhat type of cargo would you like to load?");
+            System.out.println("1: Wood");
+            System.out.println("2: Iron");
+            System.out.println("3: Lego");
+            System.out.println("Please select an option: ");
+            String input = scan.nextLine();
+            try {
+                if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 3) {
+                    selectedCargo = materials[Integer.parseInt(input) - 1];
+                    break;
+                } else {
+                    throw new InvalidSelectionException();
+                }
+            } catch (Exception e) {
+                System.out.println("\nIncorrect input, please select a valid option.");
+            }
+        }
+
+        while (true) {
+            System.out.println("\nHow many tonnes would you like to load?");
+            System.out.print("Enter amount: ");
+            String amount = scan.nextLine();
+
+            try {
+                updateData(Integer.parseInt(amount), selectedCargo);
+                break;
+            } catch (Exception e){
+                System.out.println("\nIncorrect input, please select a valid option.");
+            }
+        }
     	
         // @@ "Check if i have enough space for this cargo"
     	// this method already check if can make changes. If can, will update it.
-    	updateData(amount, target);
+
                                                         
     }
 
@@ -106,7 +126,9 @@ class Warehouse{
 
     public String toString(){
         return "\nWarehouse: " + this.name + "\n" +
-                "Current contents: " + this.currentContent + "\n" +
+                "Current content: " + materials[0].getWeight() + "t Wood, " + materials[1].getWeight() + "t Iron and " + materials[2].getWeight() + "t LEGO.\n" +
+                "Current available space: " + this.currentSpace + "\n" +
+
                 "Max capacity: " + this.maxCapacity;
     }
 

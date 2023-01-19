@@ -1,4 +1,10 @@
 package Application.vehicles;
 
-public class Truck {
+
+  interface Vehicles {
+	
+}
+class Truck implements Vehicles {
+	
+	int capasity;     //capasity of vehicle with tones
 }

@@ -4,6 +4,9 @@ import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+import Application.cargo.*;
+
+
 public class App {
     public static void main(String[] args){
         ArrayList<Warehouse> warehouseList = new ArrayList<>();
@@ -20,4 +23,12 @@ public class App {
             }
         }
     }
+}
+
+
+class Warehouse{
+	
+	int capasity = 1000;
+	Cargo cargo;
+	
 }

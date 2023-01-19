@@ -3,8 +3,7 @@ package Application.cargo;
 public class Wood implements Cargo{
 
 	private int weight =0;                 //weight in tones
-	static final int sellValue = 65;    //95 euro per metric tone
-	// static final buyValue = 40;      future feature when we going to fill the warehouse
+	static final double buyValue = 40, sellValue = 65;     
 	
 	
 	public int getWeight() {return this.weight;}

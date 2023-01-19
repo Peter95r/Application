@@ -3,8 +3,7 @@ package Application.cargo;
 public class Lego implements Cargo{
 
 	private int weight =0;                         //weight in tones
-	static final int sellValue = 115;    //95 euro per metric tone
-	// static final buyValue = 70;      future feature when we going to fill the warehouse
+	static final double buyValue = 70, sellValue = 115;        
 	
 	public int getWeight() {return this.weight;}
 	

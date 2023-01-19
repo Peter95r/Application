@@ -7,9 +7,9 @@ class Warehouse{
 
     private String name;
     private final int maxCapacity = 1000; // i made it final for now. its easier to work with 
-    private int currentSpace;    // max capacity - cargo.amount its for calculation to tell if we have enough space of new cargo or not
+    private int currentSpace;   
 
-    private int currentContent = 500;
+    private static double budget = 100_000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
     private Cargo[] materials = {new Wood(), new Iron(), new Lego()};
 
     //constructor with name as parameter
@@ -32,6 +32,7 @@ class Warehouse{
     // and add new amount to this target
     // after that will update our free space in warehouse, based of new data(new amount of cargo)
     // this method is private, only this class can use it for own calculation
+    // @@ has to also update budget @@
     private void updateData(int addedAmount, Cargo target) {
     	
     	// first check if i can add new amount
@@ -52,14 +53,13 @@ class Warehouse{
     
     
     
-    // this method will fill your warehouse
-    public void fillWarehouse() {
+    private Cargo selectCargo() {
+    	
     	Scanner scan = new Scanner(System.in);      // local scanner
-    	Cargo selectedCargo;                        // cargo on which we will operate
-
-        // @@ "I want to choose what cargo is coming in: wood, iron, lego"
+ 
+        // choose what cargo is coming in: wood, iron, lego
     	while(true) {
-            System.out.println("\nWhat type of cargo would you like to load?");
+            System.out.println("\nWhat type of cargo would you like to select?");
             System.out.println("1: Wood");
             System.out.println("2: Iron");
             System.out.println("3: Lego");
@@ -67,8 +67,7 @@ class Warehouse{
             String input = scan.nextLine();
             try {
                 if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 3) {
-                    selectedCargo = materials[Integer.parseInt(input) - 1];
-                    break;
+                    return materials[Integer.parseInt(input) - 1]; 
                 } else {
                     throw new InvalidSelectionException();
                 }
@@ -76,6 +75,17 @@ class Warehouse{
                 System.out.println("\nIncorrect input, please select a valid option.");
             }
         }
+ 
+    }
+    
+    
+    // @@ we have to update this method, it has take away the money from budget. maybe new method for budget @@
+    // @@ maybe separate method choseCargo() and call it in fillWarehouse and sellCargo and sendCargo @@
+    // this method will fill your warehouse
+    public void fillWarehouse() {
+    	Scanner scan = new Scanner(System.in);      // local scanner
+    	
+    	Cargo selectedCargo = selectCargo();
 
         while (true) {
             System.out.println("\nHow many tonnes would you like to load?");
@@ -89,27 +99,41 @@ class Warehouse{
                 System.out.println("\nIncorrect input, please select a valid option.");
             }
         }
-    	
-        // @@ "Check if i have enough space for this cargo"
-    	// this method already check if can make changes. If can, will update it.
-
-                                                        
     }
 
-    
-    
-    
-    public void sellCargo() {
-        // @@ "choose which cargo has to go"
-        // @@ "tell me how much we are goint to sell"
-        // @@ "i will check if we have this amount"
-        // @@ "if not: you can call method fillWarehouse or change amount of this cargo "
-        // @@ "choose transport"
-        // @@ "i will check if transport can carry this cargo"
-        // @@ "if not: back to change amount step or change transport"
+        
+    public void sellCargo() { 
+    	
+        // choose which cargo has to go
+    	Scanner scan = new Scanner(System.in);  
+    	
+    	Cargo selectedCargo = selectCargo(); 
+    	
+    	System.out.println(selectedCargo.getClass() + " :" + selectedCargo.getWeight() + " //test message from: Warehouse.sellCargo()");
+    	
+    	
+        // tell how much we are going to sell
+    	System.out.println("\nHow many tonnes would you like to sell?");
+        System.out.print("Enter amount: ");
+    	int amount = -(scan.nextInt());
+    	
+    	updateData(amount,selectedCargo); // this is only for test, must be deleted later
+    	
+    	
+        // check if we have this amount"
+    	if(selectedCargo.getWeight() >= amount) {
+    		// @@ chose transport
+    		// @@ "i will check if transport can carry this cargo"
+    		// @@ "if not: back to change amount step or change transport"
+    	}
+    	// @@ "if not: you can call method fillWarehouse or change amount of this cargo "
+    	else {
+    		// @@ refill
+    	}
+        
         // @@ "if everything is all right: send cargo and display message"
-        // @@ "update the data: for example wood.amount - sended amount = updated wood.amount
-        // @@ updated currentCapacity = capacity - updated wood.amount"
+    	// @@ and call method updateData();
+
     }
 
     public void sendCargo() {

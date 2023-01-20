@@ -1,7 +1,9 @@
 package Application;
 import java.util.Scanner;
+import Application.vehicles.*;
 
 import Application.cargo.*;
+import Application.vehicles.Transport;
 
 class Warehouse{
 
@@ -9,8 +11,13 @@ class Warehouse{
     private final int maxCapacity = 1000; // i made it final for now. its easier to work with 
     private int currentSpace;   
 
+
+
+    private Transport[] transport = {new Truck(), new Ship(), new Airplane()};
+    private Cargo[] materials = {new Wood(), new Iron(), new Lego()};
     private static final double budget = 100_000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
-    private final Cargo[] materials = {new Wood(), new Iron(), new Lego()};
+    
+
 
     //constructor with name as parameter
     public Warehouse(String name){
@@ -35,8 +42,15 @@ class Warehouse{
     // @@ has to also update budget @@
     private void updateData(int addedAmount, Cargo target) {
     	
+    	double tempValue = 0; 
+    	if(target.getClass().getSimpleName().equals("Wood")) tempValue = Wood.sellValue;
+    	else if(target.getClass().getSimpleName().equals("Iron")) tempValue = Iron.sellValue;
+    	else if(target.getClass().getSimpleName().equals("Lego")) tempValue = Lego.sellValue;
+    	
+    	System.out.println(tempValue);
+    	
     	// first check if i can add new amount
-    	if(this.currentSpace - addedAmount >= 0) {
+    	if(this.currentSpace - addedAmount >= 0 && Warehouse.budget - (addedAmount * tempValue)>=0) {
     		
     		// update amount in target (in cargo this is called weight)
     		target.addWeight(addedAmount);
@@ -46,7 +60,7 @@ class Warehouse{
     	}
     	else {
     		// for now this part does nothing, only tell you that is not enough space
-    		System.out.println("Not enough space in warehouse.");
+    		System.out.println("Not enough space or money in warehouse.");
     		System.out.println("You have only space for: " + this.currentSpace + " tones in this warehouse.");
     	}
     }
@@ -56,7 +70,6 @@ class Warehouse{
     }
 
     // @@ we have to update this method, it has take away the money from budget. maybe new method for budget @@
-    // @@ maybe separate method choseCargo() and call it in fillWarehouse and sellCargo and sendCargo @@
     // this method will fill your warehouse
     public void fillWarehouse(UI ui) {
     	Cargo selectedCargo = ui.selectCargo();
@@ -88,7 +101,7 @@ class Warehouse{
     	}
     	// @@ "if not: you can call method fillWarehouse or change amount of this cargo "
     	else {
-    		// @@ refill
+    		// @@ refill or change transport
     	}
         
         // @@ "if everything is all right: send cargo and display message"

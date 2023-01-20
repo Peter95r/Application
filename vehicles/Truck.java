@@ -2,6 +2,6 @@ package Application.vehicles;
 
 public class Truck implements Transport{
 	
-	int capasity;     //capacity of vehicle with tones
+	public final int  capacity = 35;     //capacity of vehicle with tones
 	public void deliver() {}
 }

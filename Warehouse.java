@@ -15,8 +15,8 @@ class Warehouse{
 
     private Transport[] transport = {new Truck(), new Ship(), new Airplane()};
     private Cargo[] materials = {new Wood(), new Iron(), new Lego()};
-    private static final double budget = 100_000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
-    
+    private static double budget = 100_000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
+    // @@ make local money, add method loanMoney();
 
 
     //constructor with name as parameter
@@ -52,9 +52,13 @@ class Warehouse{
     	// first check if i can add new amount
     	if(this.currentSpace - addedAmount >= 0 && Warehouse.budget - (addedAmount * tempValue)>=0) {
     		
+    		//update the budget
+    		Warehouse.budget -= (addedAmount * tempValue);
+    		System.out.println("//test message: current budget is:" +Warehouse.budget);
     		// update amount in target (in cargo this is called weight)
     		target.addWeight(addedAmount);
     		System.out.println(target.getClass() + ": current weight is: " + target.getWeight() +" //test message from: Warehouse.updateData()");
+    		
     		// update free space based on new data
     		initSpace();
     	}
@@ -68,6 +72,9 @@ class Warehouse{
     public Cargo[] getMaterials() {
         return materials;
     }
+    public Transport[] getTransport() {
+        return transport;
+    }
 
     // @@ we have to update this method, it has take away the money from budget. maybe new method for budget @@
     // this method will fill your warehouse
@@ -76,7 +83,6 @@ class Warehouse{
         int selectedAmount = ui.selectAmount();
 
         updateData(selectedAmount, selectedCargo);
-
     }
 
         
@@ -86,6 +92,7 @@ class Warehouse{
     	Scanner scan = new Scanner(System.in);  
     	
     	Cargo selectedCargo = ui.selectCargo();
+    	Transport selectedTransport = ui.selectTransport();
     	int selectedAmount = -ui.selectAmount();
 
     	System.out.println(selectedCargo.getClass() + " :" + selectedCargo.getWeight() + " //test message from: Warehouse.sellCargo()");

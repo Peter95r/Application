@@ -11,9 +11,13 @@ class Warehouse{
     private final int maxCapacity = 1000; // i made it final for now. its easier to work with 
     private int currentSpace;   
 
-    private static double budget = 2000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
+
+
     private Transport[] transport = {new Truck(), new Ship(), new Airplane()};
     private Cargo[] materials = {new Wood(), new Iron(), new Lego()};
+    private static final double budget = 100_000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
+    
+
 
     //constructor with name as parameter
     public Warehouse(String name){
@@ -60,77 +64,37 @@ class Warehouse{
     		System.out.println("You have only space for: " + this.currentSpace + " tones in this warehouse.");
     	}
     }
-    
-    
-    
-    private Cargo selectCargo() {
-    	
-    	Scanner scan = new Scanner(System.in);      // local scanner
- 
-        // choose what cargo is coming in: wood, iron, lego
-    	while(true) {
-            System.out.println("\nWhat type of cargo would you like to select?");
-            System.out.println("1: Wood");
-            System.out.println("2: Iron");
-            System.out.println("3: Lego");
-            System.out.println("Please select an option: ");
-            String input = scan.nextLine();
-            try {
-                if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 3) {
-                    return materials[Integer.parseInt(input) - 1]; 
-                } else {
-                    throw new InvalidSelectionException();
-                }
-            } catch (Exception e) {
-                System.out.println("\nIncorrect input, please select a valid option.");
-            }
-        }
- 
+
+    public Cargo[] getMaterials() {
+        return materials;
     }
-    
-    
+
     // @@ we have to update this method, it has take away the money from budget. maybe new method for budget @@
     // this method will fill your warehouse
-    public void fillWarehouse() {
-    	Scanner scan = new Scanner(System.in);      // local scanner
-    	
-    	Cargo selectedCargo = selectCargo();
+    public void fillWarehouse(UI ui) {
+    	Cargo selectedCargo = ui.selectCargo();
+        int selectedAmount = ui.selectAmount();
 
-        while (true) {
-            System.out.println("\nHow many tonnes would you like to load?");
-            System.out.print("Enter amount: ");
-            String amount = scan.nextLine();
+        updateData(selectedAmount, selectedCargo);
 
-            try {
-                updateData(Integer.parseInt(amount), selectedCargo);
-                break;
-            } catch (Exception e){
-                System.out.println("\nIncorrect input, please select a valid option.");
-            }
-        }
     }
 
         
-    public void sellCargo() { 
+    public void sellCargo(UI ui) {
     	
         // choose which cargo has to go
     	Scanner scan = new Scanner(System.in);  
     	
-    	Cargo selectedCargo = selectCargo(); 
-    	
+    	Cargo selectedCargo = ui.selectCargo();
+    	int selectedAmount = -ui.selectAmount();
+
     	System.out.println(selectedCargo.getClass() + " :" + selectedCargo.getWeight() + " //test message from: Warehouse.sellCargo()");
     	
-    	
-        // tell how much we are going to sell
-    	System.out.println("\nHow many tonnes would you like to sell?");
-        System.out.print("Enter amount: ");
-    	int amount = -(scan.nextInt());
-    	
-    	updateData(amount,selectedCargo); // this is only for test, must be deleted later
+    	updateData(selectedAmount,selectedCargo); // this is only for test, must be deleted later
     	
     	
         // check if we have this amount"
-    	if(selectedCargo.getWeight() >= amount) {
+    	if(selectedCargo.getWeight() >= selectedAmount) {
     		// @@ chose transport
     		// @@ "i will check if transport can carry this cargo"
     		// @@ "if not: back to change amount step or change transport"
@@ -161,7 +125,6 @@ class Warehouse{
         return "\nWarehouse: " + this.name + "\n" +
                 "Current content: " + materials[0].getWeight() + "t Wood, " + materials[1].getWeight() + "t Iron and " + materials[2].getWeight() + "t LEGO.\n" +
                 "Current available space: " + this.currentSpace + "\n" +
-
                 "Max capacity: " + this.maxCapacity;
     }
 

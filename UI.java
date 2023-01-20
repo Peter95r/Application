@@ -104,7 +104,28 @@ public class UI {
                 if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 3) {
                     return selectedWarehouse.getMaterials()[Integer.parseInt(input) - 1];
                 } else {
-                    throw new Exception();
+                    throw new InvalidSelectionException();
+                }
+            } catch (Exception e) {
+                System.out.println("\nIncorrect input, please select a valid option.");
+            }
+        }
+    }
+
+    public Cargo selectTransport() {
+        // choose what transport to use
+        while(true) {
+            System.out.println("\nWhat type of transport would you like to select?");
+            System.out.println("1: Truck");
+            System.out.println("2: Ship");
+            System.out.println("3: Airplane");
+            System.out.print("Please select an option: ");
+            String input = scan.nextLine();
+            try {
+                if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 3) {
+                    return selectedWarehouse.getTransport()[Integer.parseInt(input) - 1];
+                } else {
+                    throw new InvalidSelectionException();
                 }
             } catch (Exception e) {
                 System.out.println("\nIncorrect input, please select a valid option.");

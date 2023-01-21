@@ -49,7 +49,6 @@ class Warehouse{
     		
     		// update amount in target (in cargo this is called weight)
     		target.addWeight(addedAmount);
-    		System.out.println("We bought cargo");
     		System.out.println(target.getClass() + ": current weight is: " + target.getWeight() +" //test message from: Warehouse.updateData()");
     		
     		// update free space based on new data
@@ -110,30 +109,20 @@ class Warehouse{
     		// chose transport
     		selectedTransport = ui.selectTransport();
     		double tempCap = selectedTransport.getCap();
-    		
-    		//calculate rent price
-    		// how many vehicles we need
-    		// @@ make method that return rent prize example: calcRentCost(); it will return double
-    		double x =Math.ceil(selectedAmount / tempCap);
-    		//cost to rent any transport 350;
-    		//but lets make own method for every transport
-    		double xpr=x*350;
+    		double cost = selectedTransport.rentPrize(selectedAmount);
     		
     		//can we afford it ?
-    		if(Warehouse.budget - xpr >=0) {
-//@@ it will be:updateData(-selectedAmount,selectedCargo,tempValue,calcRentCost());
-    			updateData(-selectedAmount,selectedCargo,tempValue,xpr);
+    		if(Warehouse.budget -  cost >=0) {
+    			updateData(-selectedAmount,selectedCargo,tempValue,cost);
     		}
-    		
-    			// @@ "if not: back to change amount step or change transport"
+    		else {
+    			// @@ if we cant afford: 
+    		}	
     	}
-    	// @@ "if not: you can call method fillWarehouse or change amount of this cargo "
     	else {
+    		// @@ if we dont have cargo: move allow user move back to
     		// @@ refill or change transport
     	}
-        
-        // @@ "if everything is all right: send cargo and display message"
-    	// @@ and call method updateData();
     }
 
     public void sendCargo() {

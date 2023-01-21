@@ -39,34 +39,22 @@ class Warehouse{
     // and add new amount to this target
     // after that will update our free space in warehouse, based of new data(new amount of cargo)
     // this method is private, only this class can use it for own calculation
-    // @@ has to also update budget @@
-    private void updateData(int addedAmount, Cargo target) {
+    private void updateData(int addedAmount, Cargo target, double operatePrize, double extraCost) {
     	
-    	double tempValue = 0; 
-    	if(target.getClass().getSimpleName().equals("Wood")) tempValue = Wood.sellValue;
-    	else if(target.getClass().getSimpleName().equals("Iron")) tempValue = Iron.sellValue;
-    	else if(target.getClass().getSimpleName().equals("Lego")) tempValue = Lego.sellValue;
-    	
-    	System.out.println(tempValue);
-    	
-    	// first check if i can add new amount
-    	if(this.currentSpace - addedAmount >= 0 && Warehouse.budget - (addedAmount * tempValue)>=0) {
-    		
+    	// @@ set sell or buy prize
+
     		//update the budget
-    		Warehouse.budget -= (addedAmount * tempValue);
+    		Warehouse.budget -= ((addedAmount * operatePrize)+extraCost);
     		System.out.println("//test message: current budget is:" +Warehouse.budget);
+    		
     		// update amount in target (in cargo this is called weight)
     		target.addWeight(addedAmount);
+    		System.out.println("We bought cargo");
     		System.out.println(target.getClass() + ": current weight is: " + target.getWeight() +" //test message from: Warehouse.updateData()");
     		
     		// update free space based on new data
     		initSpace();
-    	}
-    	else {
-    		// for now this part does nothing, only tell you that is not enough space
-    		System.out.println("Not enough space or money in warehouse.");
-    		System.out.println("You have only space for: " + this.currentSpace + " tones in this warehouse.");
-    	}
+    		
     }
 
     public Cargo[] getMaterials() {
@@ -76,35 +64,68 @@ class Warehouse{
         return transport;
     }
 
-    // @@ we have to update this method, it has take away the money from budget. maybe new method for budget @@
     // this method will fill your warehouse
     public void fillWarehouse(UI ui) {
+    	
     	Cargo selectedCargo = ui.selectCargo();
         int selectedAmount = ui.selectAmount();
-
-        updateData(selectedAmount, selectedCargo);
+        
+        double tempValue = 0; 
+    	if(selectedCargo.getClass().getSimpleName().equals("Wood")) tempValue = Wood.buyValue;
+    	else if(selectedCargo.getClass().getSimpleName().equals("Iron")) tempValue = Iron.buyValue;
+    	else if(selectedCargo.getClass().getSimpleName().equals("Lego")) tempValue = Lego.buyValue;
+    	
+    	// if we have space and budget we can update data
+    	if(this.currentSpace - selectedAmount >= 0 && Warehouse.budget - (selectedAmount * tempValue)>=0) {
+    		updateData(selectedAmount, selectedCargo, tempValue,0);
+    	}
+    	else {
+    		// for now this part does nothing, only tell you that is not enough space
+    		System.out.println("Not enough space or money in warehouse.");
+    		System.out.println("You have only space for: " + this.currentSpace + " tones in this warehouse.");
+    	}
+        
     }
 
+    
         
     public void sellCargo(UI ui) {
     	
-        // choose which cargo has to go
     	Scanner scan = new Scanner(System.in);  
     	
     	Cargo selectedCargo = ui.selectCargo();
-    	Transport selectedTransport = ui.selectTransport();
-    	int selectedAmount = -ui.selectAmount();
-
+    	int selectedAmount = ui.selectAmount();
+    	
+    	double tempValue = 0; 
+    	if(selectedCargo.getClass().getSimpleName().equals("Wood")) tempValue = Wood.sellValue;
+    	else if(selectedCargo.getClass().getSimpleName().equals("Iron")) tempValue = Iron.sellValue;
+    	else if(selectedCargo.getClass().getSimpleName().equals("Lego")) tempValue = Lego.sellValue;
+    	
+        Transport selectedTransport;
     	System.out.println(selectedCargo.getClass() + " :" + selectedCargo.getWeight() + " //test message from: Warehouse.sellCargo()");
     	
-    	updateData(selectedAmount,selectedCargo); // this is only for test, must be deleted later
-    	
-    	
-        // check if we have this amount"
+        // check if we have this amount
     	if(selectedCargo.getWeight() >= selectedAmount) {
-    		// @@ chose transport
-    		// @@ "i will check if transport can carry this cargo"
-    		// @@ "if not: back to change amount step or change transport"
+    		
+    		// chose transport
+    		selectedTransport = ui.selectTransport();
+    		double tempCap = selectedTransport.getCap();
+    		
+    		//calculate rent price
+    		// how many vehicles we need
+    		// @@ make method that return rent prize example: calcRentCost(); it will return double
+    		double x =Math.ceil(selectedAmount / tempCap);
+    		//cost to rent any transport 350;
+    		//but lets make own method for every transport
+    		double xpr=x*350;
+    		
+    		//can we afford it ?
+    		if(Warehouse.budget - xpr >=0) {
+//@@ it will be:updateData(-selectedAmount,selectedCargo,tempValue,calcRentCost());
+    			updateData(-selectedAmount,selectedCargo,tempValue,xpr);
+    		}
+    		
+    			// @@ "if not: back to change amount step or change transport"
     	}
     	// @@ "if not: you can call method fillWarehouse or change amount of this cargo "
     	else {
@@ -113,7 +134,6 @@ class Warehouse{
         
         // @@ "if everything is all right: send cargo and display message"
     	// @@ and call method updateData();
-
     }
 
     public void sendCargo() {

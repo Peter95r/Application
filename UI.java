@@ -1,6 +1,7 @@
 package Application;
 
-import Application.cargo.Cargo;
+import Application.cargo.*;
+import Application.vehicles.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -112,7 +113,7 @@ public class UI {
         }
     }
 
-    public Cargo selectTransport() {
+    public Transport selectTransport() {
         // choose what transport to use
         while(true) {
             System.out.println("\nWhat type of transport would you like to select?");

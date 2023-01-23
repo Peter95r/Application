@@ -79,6 +79,7 @@ class Warehouse {
                 updateData(selectedAmount, selectedCargo, cargoPricePerTonne, 0);
                 System.out.println("You have bought " + selectedAmount + " tonnes of " + selectedCargoName +
                         " for a total of €" + (selectedAmount * cargoPricePerTonne));
+                break;
             }
         }
     }

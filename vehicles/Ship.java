@@ -12,7 +12,7 @@ public class Ship implements Transport{
 	@Override
 	public double rentPrize(int amountOfCargo) {
 		
-		int numberOfShipsNeeded = (int) Math.ceil(amountOfCargo / (double) Airplane.capacity); // we need x of ships to transport
+		int numberOfShipsNeeded = (int) Math.ceil(amountOfCargo / (double) Ship.capacity); // we need x of ships to transport
 		double cost = Ship.price * numberOfShipsNeeded; //every next ships is more expensive Ship.startPrize;
 
 		System.out.println("To transport " + amountOfCargo + " tonnes by ship you needed "

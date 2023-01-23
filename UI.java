@@ -33,7 +33,7 @@ public class UI {
 
             //Print an option and the name (city) for each warehouse
             for (Warehouse warehouse : warehouseList) {
-                System.out.println((warehouseList.indexOf(warehouse) + 1) + ": " + warehouse.getName());
+                System.out.println((warehouseList.indexOf(warehouse) + 1) + ": " + warehouse.getWarehouseLocation());
             }
 
             System.out.print("Please select a warehouse (q to quit): ");        //...
@@ -55,6 +55,7 @@ public class UI {
         }
     }
 
+    //method to select an option in the main warehouse menu
     public void selectWarehouseOption(Warehouse selectedWarehouse) {
         outer: while (true) {
             System.out.println(selectedWarehouse);
@@ -68,6 +69,9 @@ public class UI {
 
             String input = scan.nextLine();
 
+            //try-block only works if 1-4 is input as integer. If any other integer is input,
+            //the else-block will execute and throw an exception. The catch also catches NumberFormatException
+            //for when a String that cannot be converted to an Integer is input.
             try {
                 if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 4) {
                     switch (input) {
@@ -116,12 +120,14 @@ public class UI {
     public Transport selectTransport() {
         // choose what transport to use
         while(true) {
-            System.out.println("\nWhat type of transport would you like to select?");
+            System.out.println("\nWhich mode of transportation would you like to use?");
             System.out.println("1: Truck");
             System.out.println("2: Ship");
             System.out.println("3: Airplane");
             System.out.print("Please select an option: ");
+
             String input = scan.nextLine();
+
             try {
                 if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 3) {
                     return selectedWarehouse.getTransport()[Integer.parseInt(input) - 1];
@@ -136,12 +142,16 @@ public class UI {
 
     public int selectAmount(){
         while (true) {
-            System.out.println("\nHow many tonnes?");
+            System.out.println("\nHow many tonnes would you like to move? (0 to return to warehouse menu)");
             System.out.print("Enter amount: ");
             String amount = scan.nextLine();
 
             try {
-                return Integer.parseInt(amount);
+                if(Integer.parseInt(amount) >= 0){
+                    return Integer.parseInt(amount);
+                } else {
+                    throw new InvalidSelectionException();
+                }
             } catch (Exception e){
                 System.out.println("\nIncorrect input, please select a valid option.");
             }

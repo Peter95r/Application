@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class UI {
     private final ArrayList<Warehouse> warehouseList = new ArrayList();     //Instantiation of ArrayList of available warehouses
     private Warehouse selectedWarehouse;                                    //Declare variable to store currently selected warehouse
-    private Scanner scan = new Scanner(System.in);                          //Instantiate scanner
+    private final Scanner scan = new Scanner(System.in);                          //Instantiate scanner
 
     //Method to add warehouse to warehouseList
     public void addWarehouse(String name) {
@@ -50,14 +50,15 @@ public class UI {
             try {
                 return warehouseList.get(Integer.parseInt(input) - 1);
             } catch (Exception e) {
-                System.out.println("\nIncorrect input, please select a valid option.");
+                System.out.println("\nIncorrect input, please select a valid option. ");
             }
         }
     }
 
     //method to select an option in the main warehouse menu
     public void selectWarehouseOption(Warehouse selectedWarehouse) {
-        outer: while (true) {
+        outer:
+        while (true) {
             System.out.println(selectedWarehouse);
 
             System.out.println("\nWhat would you like to do in this warehouse?");
@@ -73,32 +74,30 @@ public class UI {
             //the else-block will execute and throw an exception. The catch also catches NumberFormatException
             //for when a String that cannot be converted to an Integer is input.
             try {
-                if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 4) {
-                    switch (input) {
-                        case "1":
-                            selectedWarehouse.fillWarehouse(this);
-                            break;
-                        case "2":
-                            selectedWarehouse.moveCargo(this);
-                            break;
-                        case "3":
-                            selectedWarehouse.sellCargo(this);
-                            break;
-                        case "4":
-                            break outer;
-                    }
-                } else {
-                    throw new Exception();
+                switch (Integer.parseInt(input)) {
+                    case 1:
+                        selectedWarehouse.fillWarehouse(this);
+                        break;
+                    case 2:
+                        selectedWarehouse.moveCargo(this);
+                        break;
+                    case 3:
+                        selectedWarehouse.sellCargo(this);
+                        break;
+                    case 4:
+                        break outer;
+                    default:
+                        throw new InvalidSelectionException();
                 }
             } catch (Exception e) {
-                System.out.println("Incorrect input, please select a valid option.");
+                System.out.println("Incorrect input, please select a valid option. warehouseoptionselect");
             }
         }
     }
 
     public Cargo selectCargo() {
         // choose what cargo is coming in: wood, iron, lego
-        while(true) {
+        while (true) {
             System.out.println("\nWhat type of cargo would you like to select?");
             System.out.println("1: Wood");
             System.out.println("2: Iron");
@@ -117,19 +116,19 @@ public class UI {
         }
     }
 
-    public int selectAmount(){
+    public int selectAmount() {
         while (true) {
             System.out.println("\nHow many tonnes would you like to move? (0 to return to warehouse menu)");
             System.out.print("Enter amount: ");
             String amount = scan.nextLine();
 
             try {
-                if(Integer.parseInt(amount) >= 0){
+                if (Integer.parseInt(amount) >= 0) {
                     return Integer.parseInt(amount);
                 } else {
                     throw new InvalidSelectionException();
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("\nIncorrect input, please select a valid option.");
             }
         }
@@ -137,7 +136,7 @@ public class UI {
 
     public Transport selectTransport() {
         // choose what transport to use
-        while(true) {
+        while (true) {
             System.out.println("\nWhich mode of transportation would you like to use?");
             System.out.println("1: Truck");
             System.out.println("2: Ship");
@@ -153,13 +152,13 @@ public class UI {
                     throw new InvalidSelectionException();
                 }
             } catch (Exception e) {
-                System.out.println("\nIncorrect input, please select a valid option. ");
+                System.out.println("\nIncorrect input, please select a valid option.");
             }
         }
     }
 
-    public Warehouse selectDestination(){
-        while(true) {
+    public Warehouse selectDestination() {
+        while (true) {
             System.out.println("Which warehouse would you like to move the cargo to? ");
 
             for (Warehouse warehouse : warehouseList) {
@@ -172,7 +171,7 @@ public class UI {
             try {
                 return warehouseList.get(Integer.parseInt(input) - 1);
             } catch (Exception e) {
-                System.out.println("\nIncorrect input, please select a valid option. ");
+                System.out.println("\nIncorrect input, please select a valid option.");
             }
         }
     }

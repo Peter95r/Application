@@ -1,5 +1,4 @@
 package Application;
-
 import Application.vehicles.*;
 import Application.cargo.*;
 
@@ -32,9 +31,7 @@ class Warehouse {
     // and add new amount to this target
     // after that will update our free space in warehouse, based of new data(new amount of cargo)
     // this method is private, only this class can use it for own calculation
-    private void updateData(int addedAmount, Cargo target, double operatePrize, double extraCost) {
-
-        // @@ set sell or buy prize
+    public void updateData(int addedAmount, Cargo target, double operatePrize, double extraCost) {
 
         //update the budget
         Warehouse.budget -= ((addedAmount * operatePrize) + extraCost);
@@ -47,12 +44,32 @@ class Warehouse {
 
     }
 
+    public void updateDestinationData(Warehouse destination, int amount, Cargo target) {
+
+        // update amount in target (in cargo this is called weight)
+        int cargoIndex = 0;
+
+        for(int i = 0; i <= materials.length; i++){
+            if(materials[i] == target){
+                destination.getMaterials()[i].addWeight(amount);
+            }
+        }
+
+        // update free space based on new data
+        destination.initSpace();
+
+    }
+
     public Cargo[] getMaterials() {
         return materials;
     }
 
     public Transport[] getTransport() {
         return transport;
+    }
+
+    public int getCurrentSpace() {
+        return this.currentSpace;
     }
 
     // this method will fill your warehouse
@@ -71,10 +88,10 @@ class Warehouse {
             else if (selectedCargoName.equals("Iron")) cargoPricePerTonne = Iron.buyValue;
             else if (selectedCargoName.equals("Lego")) cargoPricePerTonne = Lego.buyValue;
 
-            if (this.currentSpace - selectedAmount < 0) {
+            if (this.currentSpace < selectedAmount) {
                 System.out.println("You only have space for " + this.currentSpace + " more tonnes in this warehouse, please input another amount.");
             } else if (Warehouse.budget - (selectedAmount * cargoPricePerTonne) < 0) {
-                System.out.println("Your budget does not allow you to buy this much cargo. Please input another amount.");
+                System.out.println("Your budget does not allow you to load this much cargo. Please input another amount.");
             } else {
                 updateData(selectedAmount, selectedCargo, cargoPricePerTonne, 0);
                 System.out.println("You have bought " + selectedAmount + " tonnes of " + selectedCargoName +
@@ -103,6 +120,7 @@ class Warehouse {
             break;
         }
 
+
         double cargoPricePerTonne = 0;
         if (selectedCargoName.equals("Wood")) cargoPricePerTonne = Wood.sellValue;
         else if (selectedCargoName.equals("Iron")) cargoPricePerTonne = Iron.sellValue;
@@ -119,16 +137,58 @@ class Warehouse {
         updateData(-selectedAmount, selectedCargo, cargoPricePerTonne, transportCost);
     }
 
-    public void sendCargo() {
+    public void moveCargo(UI ui) {
+        Cargo selectedCargo = ui.selectCargo();
+        int selectedAmount;
+        Warehouse selectedDestination;
+        double transportCost;
 
+        while (true) {
+            selectedAmount = ui.selectAmount();
+
+            if (selectedAmount == 0) return;
+
+            if (selectedAmount > selectedCargo.getWeight()) {
+                System.out.println("You only have " + selectedCargo.getWeight() + " tonnes of " +
+                        selectedCargo.getClass().getSimpleName() + ". Please input a lower amount.");
+                continue;
+            }
+
+            while (true) {
+                selectedDestination = ui.selectDestination();
+
+                if (this.equals(selectedDestination)) {
+                    System.out.println("Chosen destination is the same as the currently selected warehouse, please select another.\n");
+                    continue;
+                }
+
+                if (selectedDestination.getCurrentSpace() < selectedAmount) {
+                    System.out.println("Chosen destination only has room for " + selectedDestination.getCurrentSpace() +
+                            " more tonnes. Please input a lower amount.\n");
+                }
+
+                break;
+            }
+
+            Transport selectedTransport = ui.selectTransport();
+            transportCost = selectedTransport.rentPrize(selectedAmount);
+
+            if (transportCost > Warehouse.budget) {
+                System.out.println("It would cost €" + selectedTransport.rentPrize(selectedAmount) +
+                        "to move this much " + selectedCargo.getClass().getSimpleName() + ", and you only have €"
+                        + Warehouse.budget + ". Please input a lower amount.\n");
+                break;
+            }
+
+            break;
+        }
+
+        updateData(-selectedAmount, selectedCargo, 0, transportCost);
+        updateDestinationData(selectedDestination, selectedAmount, selectedCargo);
     }
 
     public String getWarehouseLocation() {
         return warehouseLocation;
-    }
-
-    public void setWarehouseLocation(String warehouseLocation) {
-        this.warehouseLocation = warehouseLocation;
     }
 
     public String toString() {

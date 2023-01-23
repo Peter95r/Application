@@ -79,7 +79,7 @@ public class UI {
                             selectedWarehouse.fillWarehouse(this);
                             break;
                         case "2":
-                            selectedWarehouse.sendCargo();
+                            selectedWarehouse.moveCargo(this);
                             break;
                         case "3":
                             selectedWarehouse.sellCargo(this);
@@ -117,6 +117,24 @@ public class UI {
         }
     }
 
+    public int selectAmount(){
+        while (true) {
+            System.out.println("\nHow many tonnes would you like to move? (0 to return to warehouse menu)");
+            System.out.print("Enter amount: ");
+            String amount = scan.nextLine();
+
+            try {
+                if(Integer.parseInt(amount) >= 0){
+                    return Integer.parseInt(amount);
+                } else {
+                    throw new InvalidSelectionException();
+                }
+            } catch (Exception e){
+                System.out.println("\nIncorrect input, please select a valid option.");
+            }
+        }
+    }
+
     public Transport selectTransport() {
         // choose what transport to use
         while(true) {
@@ -135,25 +153,26 @@ public class UI {
                     throw new InvalidSelectionException();
                 }
             } catch (Exception e) {
-                System.out.println("\nIncorrect input, please select a valid option.");
+                System.out.println("\nIncorrect input, please select a valid option. ");
             }
         }
     }
 
-    public int selectAmount(){
-        while (true) {
-            System.out.println("\nHow many tonnes would you like to move? (0 to return to warehouse menu)");
-            System.out.print("Enter amount: ");
-            String amount = scan.nextLine();
+    public Warehouse selectDestination(){
+        while(true) {
+            System.out.println("Which warehouse would you like to move the cargo to? ");
+
+            for (Warehouse warehouse : warehouseList) {
+                System.out.println((warehouseList.indexOf(warehouse) + 1) + ": " + warehouse.getWarehouseLocation());
+            }
+
+            System.out.println("Please select an option: ");
+            String input = scan.nextLine();
 
             try {
-                if(Integer.parseInt(amount) >= 0){
-                    return Integer.parseInt(amount);
-                } else {
-                    throw new InvalidSelectionException();
-                }
-            } catch (Exception e){
-                System.out.println("\nIncorrect input, please select a valid option.");
+                return warehouseList.get(Integer.parseInt(input) - 1);
+            } catch (Exception e) {
+                System.out.println("\nIncorrect input, please select a valid option. ");
             }
         }
     }

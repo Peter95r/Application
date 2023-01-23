@@ -15,8 +15,8 @@ public class Ship implements Transport{
 		int numberOfShipsNeeded = (int) Math.ceil(amountOfCargo / (double) Airplane.capacity); // we need x of ships to transport
 		double cost = Ship.price * numberOfShipsNeeded; //every next ships is more expensive Ship.startPrize;
 
-		System.out.println("To transport " + amountOfCargo + " tonnes by ship you will need "
-				+ numberOfShipsNeeded + " ships, and transport cost will be €" + cost);
+		System.out.println("To transport " + amountOfCargo + " tonnes by ship you needed "
+				+ numberOfShipsNeeded + " ships, and transport cost was €" + cost);
 		return cost;
 	}
 	

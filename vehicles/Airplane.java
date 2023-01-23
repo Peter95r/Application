@@ -15,8 +15,8 @@ public class Airplane implements Transport{
 		int numberOfPlanesNeeded = (int) Math.ceil(amountOfCargo / (double) Airplane.capacity); // we need x of trucks to transport
 		double cost = Airplane.price * numberOfPlanesNeeded; //every next plane is more expensive Truck.startPrize;
 
-		System.out.println("To transport " + amountOfCargo +" tonnes by plane you will need "
-				+ numberOfPlanesNeeded + " planes, and transport cost will be €" + cost);
+		System.out.println("To transport " + amountOfCargo +" tonnes by plane you needed "
+				+ numberOfPlanesNeeded + " planes, and transport cost was €" + cost);
 		return cost;
 	}
 	

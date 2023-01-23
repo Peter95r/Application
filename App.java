@@ -11,6 +11,7 @@ public class App {
         ui.addWarehouse("Deventer");
         ui.addWarehouse("Berlin");
         ui.addWarehouse("Warszawa");
+        ui.addWarehouse("Rotterdam");
 
         ui.start();
     }

@@ -11,8 +11,8 @@ public class Truck implements Transport{
 		int numberOfTrucksNeeded = (int) Math.ceil(amountOfCargo / (double) Truck.capacity); // we need x of trucks to transport
 		double cost = Truck.price * numberOfTrucksNeeded; //every next truck is more expensive Truck.startPrize;
 
-		System.out.println("To transport " + amountOfCargo +" tonnes by truck you will need " +
-				numberOfTrucksNeeded + " trucks, and transport cost will be €" + cost);
+		System.out.println("To transport " + amountOfCargo +" tonnes by truck you needed " +
+				numberOfTrucksNeeded + " trucks, and transport cost was €" + cost);
 		return cost;
 	}
 }

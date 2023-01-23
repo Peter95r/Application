@@ -4,11 +4,11 @@ import Application.cargo.*;
 
 class Warehouse {
 
-    private String warehouseLocation;
+    private final String warehouseLocation;
     private final int maxCapacity = 1000; // i made it final for now. its easier to work with 
     private int currentSpace;
-    private Transport[] transport = {new Truck(), new Ship(), new Airplane()};
-    private Cargo[] materials = {new Wood(), new Iron(), new Lego()};
+    private final Transport[] transport = {new Truck(), new Ship(), new Airplane()};
+    private final Cargo[] materials = {new Wood(), new Iron(), new Lego()};
     private static double budget = 100_000.0; // static because there is one budget to manage 3 warehouses. for start 100k, but we can change
 
     // @@ make local money, add method loanMoney();
@@ -47,8 +47,6 @@ class Warehouse {
     public void updateDestinationData(Warehouse destination, int amount, Cargo target) {
 
         // update amount in target (in cargo this is called weight)
-        int cargoIndex = 0;
-
         for(int i = 0; i <= materials.length; i++){
             if(materials[i] == target){
                 destination.getMaterials()[i].addWeight(amount);
@@ -94,8 +92,8 @@ class Warehouse {
                 System.out.println("Your budget does not allow you to load this much cargo. Please input another amount.");
             } else {
                 updateData(selectedAmount, selectedCargo, cargoPricePerTonne, 0);
-                System.out.println("You have bought " + selectedAmount + " tonnes of " + selectedCargoName +
-                        " for a total of €" + (selectedAmount * cargoPricePerTonne));
+                System.out.println("You loaded " + selectedAmount + " tonnes of " + selectedCargoName +
+                        " in " + this.getWarehouseLocation() + ", which cost €" + (selectedAmount * cargoPricePerTonne));
                 break;
             }
         }
@@ -131,7 +129,8 @@ class Warehouse {
         double revenue = selectedAmount * cargoPricePerTonne;
         double profit = revenue - transportCost;
 
-        System.out.println(selectedAmount + " tonnes of " + selectedCargoName + " was sold for a total of €" + revenue +
+        System.out.println(selectedAmount + " tonnes of " + selectedCargoName + " was sold from the warehouse in " +
+        this.getWarehouseLocation() + " for a total of €" + revenue +
                 ". Due to the transport cost, the profit was €" + profit);
 
         updateData(-selectedAmount, selectedCargo, cargoPricePerTonne, transportCost);

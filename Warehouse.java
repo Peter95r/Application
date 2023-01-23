@@ -59,9 +59,10 @@ class Warehouse {
     public void fillWarehouse(UI ui) {
         Cargo selectedCargo = ui.selectCargo();
         String selectedCargoName = selectedCargo.getClass().getSimpleName();
+        int selectedAmount;
 
         while (true) {
-            int selectedAmount = ui.selectAmount();
+            selectedAmount = ui.selectAmount();
 
             if (selectedAmount == 0) return;
 
@@ -78,7 +79,6 @@ class Warehouse {
                 updateData(selectedAmount, selectedCargo, cargoPricePerTonne, 0);
                 System.out.println("You have bought " + selectedAmount + " tonnes of " + selectedCargoName +
                         " for a total of €" + (selectedAmount * cargoPricePerTonne));
-                break;
             }
         }
     }
@@ -87,9 +87,10 @@ class Warehouse {
     public void sellCargo(UI ui) {
         Cargo selectedCargo = ui.selectCargo();
         String selectedCargoName = selectedCargo.getClass().getSimpleName();
+        int selectedAmount;
 
         while (true) {
-            int selectedAmount = ui.selectAmount();
+            selectedAmount = ui.selectAmount();
 
             if (selectedAmount == 0) return;
 
@@ -98,23 +99,23 @@ class Warehouse {
                         selectedCargoName + ". Please input a lower amount.");
                 continue;
             }
-
-            double cargoPricePerTonne = 0;
-            if (selectedCargoName.equals("Wood")) cargoPricePerTonne = Wood.sellValue;
-            else if (selectedCargoName.equals("Iron")) cargoPricePerTonne = Iron.sellValue;
-            else if (selectedCargoName.equals("Lego")) cargoPricePerTonne = Lego.sellValue;
-
-            Transport selectedTransport = ui.selectTransport();
-            double transportCost = selectedTransport.rentPrize(selectedAmount);
-            double revenue = selectedAmount * cargoPricePerTonne;
-            double profit = revenue - transportCost;
-
-            System.out.println(selectedAmount + " tonnes of " + selectedCargoName + " was sold for a total of €" + revenue +
-                    ". Due to the transport cost, the profit was €" + profit);
-
-            updateData(-selectedAmount, selectedCargo, cargoPricePerTonne, transportCost);
             break;
         }
+
+        double cargoPricePerTonne = 0;
+        if (selectedCargoName.equals("Wood")) cargoPricePerTonne = Wood.sellValue;
+        else if (selectedCargoName.equals("Iron")) cargoPricePerTonne = Iron.sellValue;
+        else if (selectedCargoName.equals("Lego")) cargoPricePerTonne = Lego.sellValue;
+
+        Transport selectedTransport = ui.selectTransport();
+        double transportCost = selectedTransport.rentPrize(selectedAmount);
+        double revenue = selectedAmount * cargoPricePerTonne;
+        double profit = revenue - transportCost;
+
+        System.out.println(selectedAmount + " tonnes of " + selectedCargoName + " was sold for a total of €" + revenue +
+                ". Due to the transport cost, the profit was €" + profit);
+
+        updateData(-selectedAmount, selectedCargo, cargoPricePerTonne, transportCost);
     }
 
     public void sendCargo() {

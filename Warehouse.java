@@ -101,6 +101,7 @@ class Warehouse {
 
 
     public void sellCargo(UI ui) {
+
         Cargo selectedCargo = ui.selectCargo();
         String selectedCargoName = selectedCargo.getClass().getSimpleName();
         int selectedAmount;
@@ -109,6 +110,7 @@ class Warehouse {
             selectedAmount = ui.selectAmount();
 
             if (selectedAmount == 0) return;
+
 
             if (selectedAmount > selectedCargo.getWeight()) {
                 System.out.println("You only have " + selectedCargo.getWeight() + " tonnes of " +

@@ -116,12 +116,11 @@ class Warehouse{
     			updateData(-selectedAmount,selectedCargo,tempValue,cost);
     		}
     		else {
-    			// @@ if we cant afford: 
+    			// @@ if we cant afford: let me move back or take less cargo ?
     		}	
     	}
     	else {
-    		// @@ if we dont have cargo: move allow user move back to
-    		// @@ refill or change transport
+    		// @@ if we dont have cargo: let me move back so i can buy extra cargo
     	}
     }
 

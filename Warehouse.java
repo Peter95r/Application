@@ -47,7 +47,7 @@ class Warehouse {
     public void updateDestinationData(Warehouse destination, int amount, Cargo target) {
 
         // update amount in target (in cargo this is called weight)
-        for(int i = 0; i <= materials.length; i++){
+        for(int i = 0; i < materials.length; i++){
             if(materials[i] == target){
                 destination.getMaterials()[i].addWeight(amount);
             }

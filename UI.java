@@ -57,8 +57,7 @@ public class UI {
 
     //method to select an option in the main warehouse menu
     public void selectWarehouseOption(Warehouse selectedWarehouse) {
-        outer:
-        while (true) {
+        fiets: while (true) {
             System.out.println(selectedWarehouse);
 
             System.out.println("\nWhat would you like to do in this warehouse?");
@@ -85,12 +84,12 @@ public class UI {
                         selectedWarehouse.sellCargo(this);
                         break;
                     case 4:
-                        break outer;
+                        break fiets;
                     default:
                         throw new InvalidSelectionException();
                 }
             } catch (Exception e) {
-                System.out.println("Incorrect input, please select a valid option. warehouseoptionselect");
+                System.out.println("Incorrect input, please select a valid option.");
             }
         }
     }
